@@ -22,12 +22,25 @@ public class CCCAbsolutelyAcidic {
     }
     // DONE GETTING INPUT, START PROCESSING
 
-    System.out.println(findminmax(frequencies, 1));
+    // Get the max and min values
+    ArrayList<Integer> max = findminmax(frequencies, 1);
+    ArrayList<Integer> min = findminmax(frequencies, -1);
+    int maxdif = 0;
+    // Go through every possible combination of mins and maxes, see which has the biggest difference between the two
+    for (int i = 0; i < max.size(); i++){
+      for (int k = 0; k < min.size(); k++){
+        int diff = Math.abs(readings.get(max.get(i)) - readings.get(min.get(k)));
+        if (diff > maxdif){
+          maxdif = diff;
+        }
+      }
+    }
+    System.out.println(maxdif);
   }
 
   // This basically finds all candidates that are at the min value or the max value
   public static ArrayList<Integer> findminmax(ArrayList<Integer> search, int mode){
-    // searching mode: 1 = max, -1 = min, saves having to have 2 separate methods to do very simliar things
+    // searching mode: max = 1, min = -1, saves having to have 2 separate methods to do very simliar things
     ArrayList<Integer> result = new ArrayList<>(); // Arraylist stores all values that occur the min/max
     int minmax = (mode == 1) ? -1 : Integer.MAX_VALUE; // Current maximum or minimum frequency
     for (int i = 0; i < search.size(); i++){ // For every item in the frequency list
