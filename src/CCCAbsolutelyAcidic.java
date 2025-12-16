@@ -1,7 +1,7 @@
 // @problem  |  CCC 2012 S3 - Absolutely Acidic
 // @author   |  Beckett Clarke
-// @version  |  1
-// @date     |  2025-12-15
+// @version  |  1F
+// @date     |  2025-12-14
 import java.util.ArrayList;
 import java.util.Scanner;
 public class CCCAbsolutelyAcidic {
