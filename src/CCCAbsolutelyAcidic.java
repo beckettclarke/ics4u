@@ -21,7 +21,7 @@ public class CCCAbsolutelyAcidic {
       if (ri != -1){
         frequencies.set(ri,frequencies.get(ri)+1);
       } else {
-        readings.add(r):
+        readings.add(r);
         frequencies.add(1);
       }
     }
