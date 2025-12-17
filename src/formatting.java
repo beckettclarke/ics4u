@@ -30,24 +30,11 @@ public class CCCAbsolutelyAcidic {
     // Get the max and second max values
     findminmax(frequencies);
     int maxdif = 0;
-    
-    // IF THE MOST FREQUENT LIST HAS MULTIPLE VALUES, Only compare those values
-    if (result.size() > 1) {
-      // Multiple readings have the max frequency - find max difference among them
-      for (int i = 0; i < result.size(); i++){ 
-        for (int k = 0; k < result.size(); k++){
-          int diff = Math.abs(readings.get(result.get(i)) - readings.get(result.get(k))); // Find difference between the two
-          if (diff > maxdif){ // Update maxdif if this is the largest difference found
-            maxdif = diff;
-          }
-        }
-      }
-    } else {
-      // IF IT DOESNT, compare most frequent with second most frequent
-      // Loops over all possible combos of the two
+    // Go through every possible combination of maxes and second maxes, see which has the biggest difference between the two
+    for (int i = 0; i < result.size(); i++){
       for (int k = 0; k < result2.size(); k++){
-        int diff = Math.abs(readings.get(result.get(0)) - readings.get(result2.get(k)));
-        if (diff > maxdif){ // Update if this is the largest difference found
+        int diff = Math.abs(readings.get(result.get(i)) - readings.get(result2.get(k)));
+        if (diff > maxdif){
           maxdif = diff;
         }
       }
@@ -70,6 +57,12 @@ public class CCCAbsolutelyAcidic {
         minmax = cur;
       } else if (minmax == cur) {
         result.add(i); // Add the current one as candidate since it is the same frequency as the max
+        if (result2.isEmpty()) {
+          result2.add(i); // If second max not set yet, also add to result2
+          minmax2 = minmax; // Set minmax2 to match minmax for next iterations
+        } else if (minmax2 == cur) {
+          result2.add(i); // Add to result2 if it matches the second max frequency
+        }
       } else if (cur > minmax2) {
         result2.clear(); // New second max found
         result2.add(i);
