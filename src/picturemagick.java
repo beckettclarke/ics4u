@@ -51,6 +51,7 @@ public class picturemagick {
     System.out.println("--- Select action ---");
     System.out.println("1. Gaussian Blur");
     System.out.println("2. Box Blur");
+    System.out.println("3. Overexpose");
     System.out.print("Action to apply: ");
     int choice = scan.nextInt();
     switch (choice) {
@@ -64,8 +65,13 @@ public class picturemagick {
         int bbr = scan.nextInt();
         BoxBlur(bbr);
         break;
+      case 3:
+        System.out.print("Enter overexpose amount: ");
+        int over = scan.nextInt();
+        Overexpose(over);
+        break;
       default:
-        System.out.println("Invalid choice.");
+        System.out.println("Invalid option.");
         break;
     }
 
@@ -109,6 +115,53 @@ public class picturemagick {
   // =================================================================================================================================== //
   
   public static double[][] GaussianKernel(int radius){
+    int size = radius * 2 + 1; // Middle pixel + the radius on each side
+    double[][] kernel = new double[size][size];
+    double sigma = radius / 3.0; // Apparently this should be 2.0 or 3.0 for nice blur
+    for (int x = 0; x < size; x++) {
+      for (int y = 0; y < size; y++) {
+        double base = 1 / 2.0 * Math.PI * Math.pow(sigma, 2); // Bottom part
+        double exponent = -(x*x + y*y) / 2*Math.pow(sigma, 2); // Exponent that goes to eulers number
+        kernel[x][y] = base * Math.exp(exponent);
+      }
+    }
+    return kernel;
+  }
+
+  // =================================================================================================================================== //
+
+  public static void Overexpose(int radius){
+    double[][] kernel = OverexposeKernel(radius);
+    // For each pixel in each row
+    for (int i = 0; i < width; i++){
+      for (int k = 0; k < height; k++){
+        int rtotal = 0, gtotal = 0, btotal = 0;
+        // For each neighbouring pixel within the radius
+        for (int j = -radius; j <= radius; j++){
+          for (int l = -radius; l <= radius; l++){
+            int lookingatx = i + j;
+            int lookingaty = k + l;
+            // Makes sure its within the image edges (Not checking a value that doesnt exist)
+            if (lookingatx >= 0 && lookingatx < width && lookingaty >= 0 && lookingaty < height){
+              double weight = kernel[j + radius][l + radius];
+              rtotal += red[lookingaty][lookingatx] * weight;
+              gtotal += green[lookingaty][lookingatx] * weight;
+              btotal += blue[lookingaty][lookingatx] * weight;
+            }
+          }
+        }
+        // Set the new pixel values but makes sure they arent too high or low (Must between 0-255)
+        ored[k][i] = (int) Math.min(Math.max(rtotal, 0), 255);
+        ogreen[k][i] = (int) Math.min(Math.max(gtotal, 0), 255);
+        oblue[k][i] = (int) Math.min(Math.max(btotal, 0), 255);
+        
+      }
+    }
+  }
+
+  // =================================================================================================================================== //
+  
+  public static double[][] OverexposeKernel(int radius){
     int size = radius * 2 + 1; // Middle pixel + the radius on each side
     double[][] kernel = new double[size][size];
     double sigma = radius / 3.0; // Apparently this should be 2.0 or 3.0 for nice blur
