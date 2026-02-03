@@ -48,40 +48,61 @@ public class picturemagick {
     }
 
     // Main menu screen
-    System.out.println("--- Select action ---");
-    System.out.println("1. Gaussian Blur");
-    System.out.println("2. Box Blur");
-    System.out.println("3. Overexpose");
-    System.out.print("Action to apply: ");
-    int choice = scan.nextInt();
-    switch (choice) {
-      case 1:
-        System.out.print("Enter blur radius: ");
-        int gbr = scan.nextInt();
-        GaussianBlur(gbr);
-        break;
-      case 2:
-        System.out.print("Enter blur radius: ");
-        int bbr = scan.nextInt();
-        BoxBlur(bbr);
-        break;
-      case 3:
-        System.out.print("Enter overexpose amount: ");
-        int over = scan.nextInt();
-        Overexpose(over);
-        break;
-      default:
-        System.out.println("Invalid option.");
-        break;
+    int choice = -1;
+    while (choice != 0) {
+      System.out.println("--- Select action ---");
+      System.out.println("1 | Gaussian Blur");
+      System.out.println("2 | Box Blur");
+      System.out.println("3 | Overexpose");
+      System.out.println("0 | Quit");
+      System.out.print("Action to apply: ");
+      choice = scan.nextInt();
+      switch (choice) {
+        case 1:
+          System.out.print("Enter blur radius: ");
+          int gbr = scan.nextInt();
+          GaussianBlur(gbr);
+          pushNewImg();
+          saveimage(path.substring(0, path.indexOf("."))+ "-modified.png", ored, ogreen, oblue);
+          break;
+        case 2:
+          System.out.print("Enter blur radius: ");
+          int bbr = scan.nextInt();
+          BoxBlur(bbr);
+          pushNewImg();
+          saveimage(path.substring(0, path.indexOf("."))+ "-modified.png", ored, ogreen, oblue);
+          break;
+        case 3:
+          System.out.print("Enter overexpose amount: ");
+          int over = scan.nextInt();
+          Overexpose(over);
+          pushNewImg();
+          saveimage(path.substring(0, path.indexOf("."))+ "-modified.png", ored, ogreen, oblue);
+          break;
+        case 0:
+          System.out.println("Exiting...");
+          break;
+        default:
+          System.out.println("Invalid option.");
+          break;
+      }
     }
-
-    // Export the modified image
-    saveimage(path.substring(0, path.indexOf("."))+ "-modified.png", ored, ogreen, oblue);
   }
-
 
   // =================================================================================================================================== //
 
+  public static void pushNewImg() {
+    // Replaces the image once its modified so it can be modified further
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
+        red[y][x] = ored[y][x];
+        green[y][x] = ogreen[y][x];
+        blue[y][x] = oblue[y][x];
+      }
+    }
+  }
+
+  // =================================================================================================================================== //
 
   public static void GaussianBlur(int radius){
     double[][] kernel = GaussianKernel(radius);
