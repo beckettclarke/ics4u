@@ -76,7 +76,7 @@ public class picturemagick {
     }
 
     // Export the modified image
-    saveimage(path.substring(0, path.indexOf("."))+ "-blurred.png", ored, ogreen, oblue);
+    saveimage(path.substring(0, path.indexOf("."))+ "-modified.png", ored, ogreen, oblue);
   }
 
 
@@ -85,10 +85,13 @@ public class picturemagick {
 
   public static void GaussianBlur(int radius){
     double[][] kernel = GaussianKernel(radius);
+    System.out.println("Generated Kernel");
     // For each pixel in each row
+    System.out.println("--------------------------------");
     for (int i = 0; i < width; i++){
+      System.out.print("\rProcessing row [" + (i+1) + "/" + width + "]");
       for (int k = 0; k < height; k++){
-        int rtotal = 0, gtotal = 0, btotal = 0;
+        double rtotal = 0, gtotal = 0, btotal = 0;
         // For each neighbouring pixel within the radius
         for (int j = -radius; j <= radius; j++){
           for (int l = -radius; l <= radius; l++){
@@ -104,12 +107,14 @@ public class picturemagick {
           }
         }
         // Set the new pixel values but makes sure they arent too high or low (Must between 0-255)
-        ored[k][i] = (int) Math.min(Math.max(rtotal, 0), 255);
-        ogreen[k][i] = (int) Math.min(Math.max(gtotal, 0), 255);
-        oblue[k][i] = (int) Math.min(Math.max(btotal, 0), 255);
+        ored[k][i] = (int) Math.min(Math.max(Math.round(rtotal), 0), 255);
+        ogreen[k][i] = (int) Math.min(Math.max(Math.round(gtotal), 0), 255);
+        oblue[k][i] = (int) Math.min(Math.max(Math.round(btotal), 0), 255);
         
       }
     }
+    System.out.println();
+    System.out.println("--------------------------------");
   }
 
   // =================================================================================================================================== //
@@ -118,13 +123,28 @@ public class picturemagick {
     int size = radius * 2 + 1; // Middle pixel + the radius on each side
     double[][] kernel = new double[size][size];
     double sigma = radius / 3.0; // Apparently this should be 2.0 or 3.0 for nice blur
+    double sum = 0.0;
+    
+    // Calculate Gaussian values
     for (int x = 0; x < size; x++) {
       for (int y = 0; y < size; y++) {
-        double base = 1 / 2.0 * Math.PI * Math.pow(sigma, 2); // Bottom part
-        double exponent = -(x*x + y*y) / 2*Math.pow(sigma, 2); // Exponent that goes to eulers number
+        // Distance from center
+        int dx = x - radius;
+        int dy = y - radius;
+        double base = 1.0 / (2.0 * Math.PI * Math.pow(sigma, 2)); // Bottom part
+        double exponent = -(dx*dx + dy*dy) / (2.0 * Math.pow(sigma, 2)); // Fixed: added parentheses
         kernel[x][y] = base * Math.exp(exponent);
+        sum += kernel[x][y];
       }
     }
+    
+    // Normalize the kernel so all values sum to 1
+    for (int x = 0; x < size; x++) {
+      for (int y = 0; y < size; y++) {
+        kernel[x][y] /= sum;
+      }
+    }
+    
     return kernel;
   }
 
