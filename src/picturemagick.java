@@ -200,9 +200,9 @@ public class picturemagick {
           }
         }
         // Set the new pixel values but makes sure they arent too high or low (Must between 0-255)
-        ored[k][i] = (int) Math.min(Math.max(rtotal, 0), 255);
-        ogreen[k][i] = (int) Math.min(Math.max(gtotal, 0), 255);
-        oblue[k][i] = (int) Math.min(Math.max(btotal, 0), 255);
+        ored[k][i] = (int) Math.min(Math.max(rtotal / 20, 0), 255);
+        ogreen[k][i] = (int) Math.min(Math.max(gtotal / 20, 0), 255);
+        oblue[k][i] = (int) Math.min(Math.max(btotal / 20, 0), 255);
         
       }
     }
