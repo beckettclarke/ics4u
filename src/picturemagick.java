@@ -109,6 +109,7 @@ public class picturemagick {
   // =================================================================================================================================== //
 
   public static void GaussianBlur(int radius){
+    long start = System.currentTimeMillis();
     double[][] kernel = GaussianKernel(radius);
     System.out.println("Generated Kernel");
     // For each pixel in each row
@@ -140,6 +141,7 @@ public class picturemagick {
     }
     System.out.println();
     System.out.println("--------------------------------");
+    System.out.println("Finished, took " + ((System.currentTimeMillis() - start) / 1000.0) +" seconds to process");
   }
 
   // =================================================================================================================================== //
@@ -176,6 +178,7 @@ public class picturemagick {
   // =================================================================================================================================== //
 
   public static void Overexpose(int radius){
+    long start = System.currentTimeMillis();
     double[][] kernel = OverexposeKernel(radius);
     // For each pixel in each row
     for (int i = 0; i < width; i++){
@@ -203,6 +206,9 @@ public class picturemagick {
         
       }
     }
+    System.out.println();
+    System.out.println("--------------------------------");
+    System.out.println("Finished, took " + ((System.currentTimeMillis() - start) / 1000.0) +" seconds to process");
   }
 
   // =================================================================================================================================== //
@@ -225,6 +231,7 @@ public class picturemagick {
   // =================================================================================================================================== //
 
   public static void BoxBlur(int radius){
+    long start = System.currentTimeMillis();
     // For each pixel in each row
     for (int i = 0; i < width; i++){
       System.out.print("\rProcessing row [" + (i+1) + "/" + width + "]");
@@ -272,9 +279,9 @@ public class picturemagick {
         oblue[i][k] = btotal / count;
       }
     }
-    // System.out.println("Red values: " + Arrays.deepToString(ored));
-    // System.out.println("Green values: " + Arrays.deepToString(ogreen));
-    // System.out.println("Blue values: " + Arrays.deepToString(oblue));
+    System.out.println();
+    System.out.println("--------------------------------");
+    System.out.println("Finished, took " + ((System.currentTimeMillis() - start) / 1000.0) +" seconds to process");
   }
 
 
