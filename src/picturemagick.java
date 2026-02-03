@@ -11,6 +11,10 @@ public class picturemagick {
   public static void main(String[] args) throws IOException{
     Scanner scan = new Scanner(System.in);
     // Gets the image path from inputs
+    System.out.println("--------------------------------");
+    System.out.println("|         PICTUREMAGICK        |");
+    System.out.println("|     easy image processing    |");
+    System.out.println("--------------------------------");
     System.out.print("Enter image file path: ");
     String path = scan.nextLine().trim();
     // Remove the quotes that terminal adds when you drag the file into the window instead of typing manually
@@ -153,7 +157,7 @@ public class picturemagick {
         int dx = x - radius;
         int dy = y - radius;
         double base = 1.0 / (2.0 * Math.PI * Math.pow(sigma, 2)); // Bottom part
-        double exponent = -(dx*dx + dy*dy) / (2.0 * Math.pow(sigma, 2)); // Fixed: added parentheses
+        double exponent = -(dx*dx + dy*dy) / (2.0 * Math.pow(sigma, 2));
         kernel[x][y] = base * Math.exp(exponent);
         sum += kernel[x][y];
       }
@@ -175,6 +179,7 @@ public class picturemagick {
     double[][] kernel = OverexposeKernel(radius);
     // For each pixel in each row
     for (int i = 0; i < width; i++){
+      System.out.print("\rProcessing row [" + (i+1) + "/" + width + "]");
       for (int k = 0; k < height; k++){
         int rtotal = 0, gtotal = 0, btotal = 0;
         // For each neighbouring pixel within the radius
@@ -222,6 +227,7 @@ public class picturemagick {
   public static void BoxBlur(int radius){
     // For each pixel in each row
     for (int i = 0; i < width; i++){
+      System.out.print("\rProcessing row [" + (i+1) + "/" + width + "]");
       for (int k = 0; k < height; k++){
         // Variables to store the total of each value
         int rtotal = 0, gtotal = 0, btotal = 0;
@@ -245,6 +251,7 @@ public class picturemagick {
     }
     // For each pixel in each column
     for (int i = 0; i < height; i++){
+      System.out.print("\rProcessing column [" + (i+1) + "/" + height + "]");
       for (int k = 0; k < width; k++){
         // Variables to store the total of each value
         int rtotal = 0, gtotal = 0, btotal = 0;
