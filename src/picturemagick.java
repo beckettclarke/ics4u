@@ -58,6 +58,7 @@ public class picturemagick {
       System.out.println("1 | Gaussian Blur");
       System.out.println("2 | Box Blur");
       System.out.println("3 | Overexpose");
+      System.out.println("4 | Greyscale");
       System.out.println("0 | Quit");
       System.out.print("Action to apply: ");
       choice = scan.nextInt();
@@ -80,6 +81,11 @@ public class picturemagick {
           System.out.print("Enter overexpose amount: ");
           int over = scan.nextInt();
           Overexpose(over);
+          pushNewImg();
+          saveimage(path.substring(0, path.indexOf("."))+ "-modified.png", ored, ogreen, oblue);
+          break;
+        case 4:
+          Greyscale();
           pushNewImg();
           saveimage(path.substring(0, path.indexOf("."))+ "-modified.png", ored, ogreen, oblue);
           break;
@@ -284,6 +290,22 @@ public class picturemagick {
     System.out.println("Finished, took " + ((System.currentTimeMillis() - start) / 1000.0) +" seconds to process");
   }
 
+
+  // ==================================================================================================================================== //
+
+  public static void Greyscale(){
+    // loops over each pixel in the image
+    for (int y = 0; y < height; y++) {
+      System.out.print("\rProcessing row [" + (y+1) + "/" + height + "]");
+      for (int x = 0; x < width; x++) {
+        // Gets the average of the red green and blue values to get the greyscale value
+        int grey = (red[y][x] + green[y][x] + blue[y][x]) / 3;
+        ored[y][x] = grey;
+        ogreen[y][x] = grey;
+        oblue[y][x] = grey;
+      }
+    }
+  }
 
   // =================================================================================================================================== //
 
