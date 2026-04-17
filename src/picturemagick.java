@@ -68,22 +68,34 @@ public class picturemagick {
       choice = scan.nextInt();
       switch (choice) {
         case 1:
-          System.out.print("Enter blur radius: ");
-          int gbr = scan.nextInt();
+          int gbr = -1;
+          while (gbr < 0 || gbr > 75) {
+            System.out.print("Enter blur radius (px, 0-75): ");
+            gbr = (int) Math.round(scan.nextDouble());
+            if (gbr < 0 || gbr > 75) {
+              System.out.println("Invalid radius. Must be between 0 and 75.");
+            }
+          }
           GaussianBlur(gbr);
           pushNewImg();
           saveimage(path.substring(0, path.indexOf(".")) + "-modified.png", ored, ogreen, oblue, oalpha);
           break;
         case 2:
-          System.out.print("Enter blur radius: ");
-          int bbr = scan.nextInt();
+          int bbr = -1;
+          while (bbr < 0 || bbr > 75) {
+            System.out.print("Enter blur radius (px, 0-75): ");
+            bbr = (int) Math.round(scan.nextDouble());
+            if (bbr < 0 || bbr > 75) {
+              System.out.println("Invalid radius. Must be between 0 and 75.");
+            }
+          }
           BoxBlur(bbr);
           pushNewImg();
           saveimage(path.substring(0, path.indexOf(".")) + "-modified.png", ored, ogreen, oblue, oalpha);
           break;
         case 3:
-          System.out.print("Enter overexpose amount: ");
-          int over = scan.nextInt();
+          System.out.print("Enter overexpose amount (0-50): ");
+          int over = (int) Math.round(scan.nextDouble());
           Overexpose(over);
           pushNewImg();
           saveimage(path.substring(0, path.indexOf(".")) + "-modified.png", ored, ogreen, oblue, oalpha);
@@ -94,8 +106,15 @@ public class picturemagick {
           saveimage(path.substring(0, path.indexOf(".")) + "-modified.png", ored, ogreen, oblue, oalpha);
           break;
         case 5:
-          System.out.print("Enter corner rounding radius: ");
-          int r = scan.nextInt();
+          int max = Math.min(width, height) / 2;
+          int r = -1;
+          while (r < 0 || r > max) {
+            System.out.print("Enter corner rounding radius (px, 0-" + max + "): ");
+            r = (int) Math.round(scan.nextDouble());
+            if (r < 0 || r > max) {
+              System.out.println("Invalid radius. Must be between 0 and " + max + ".");
+            }
+          }
           CornerRound(r);
           pushNewImg();
           saveimage(path.substring(0, path.indexOf(".")) + "-modified.png", ored, ogreen, oblue, oalpha);
